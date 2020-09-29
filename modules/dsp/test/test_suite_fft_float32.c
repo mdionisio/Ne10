@@ -119,7 +119,11 @@ void test_fft_c2c_1d_float32_conformance()
                 GUARD_ARRAY (out_neon, fftSize * 2);
 
                 ne10_fft_c2c_1d_float32_c ( (ne10_fft_cpx_float32_t*) out_c, (ne10_fft_cpx_float32_t*) in_c, cfg_c, 0);
+#ifdef ENABLE_NE10_PLAIN_C_PLATFORM
+                ne10_fft_c2c_1d_float32 ( (ne10_fft_cpx_float32_t*) out_neon, (ne10_fft_cpx_float32_t*) in_neon, cfg_neon, 0);
+#else
                 ne10_fft_c2c_1d_float32_neon ( (ne10_fft_cpx_float32_t*) out_neon, (ne10_fft_cpx_float32_t*) in_neon, cfg_neon, 0);
+#endif
 
                 assert_true (CHECK_ARRAY_GUARD (out_c, fftSize * 2));
                 assert_true (CHECK_ARRAY_GUARD (out_neon, fftSize * 2));
@@ -136,7 +140,11 @@ void test_fft_c2c_1d_float32_conformance()
                 GUARD_ARRAY (out_neon, fftSize * 2);
 
                 ne10_fft_c2c_1d_float32_c ( (ne10_fft_cpx_float32_t*) out_c, (ne10_fft_cpx_float32_t*) in_c, cfg_c,  1);
+#ifdef ENABLE_NE10_PLAIN_C_PLATFORM
+                ne10_fft_c2c_1d_float32 ( (ne10_fft_cpx_float32_t*) out_neon, (ne10_fft_cpx_float32_t*) in_neon, cfg_neon, 1);
+#else
                 ne10_fft_c2c_1d_float32_neon ( (ne10_fft_cpx_float32_t*) out_neon, (ne10_fft_cpx_float32_t*) in_neon, cfg_neon, 1);
+#endif
 
                 assert_true (CHECK_ARRAY_GUARD (out_c, fftSize * 2));
                 assert_true (CHECK_ARRAY_GUARD (out_neon, fftSize * 2));
@@ -208,6 +216,9 @@ void test_fft_c2c_1d_float32_performance()
                 ne10_fft_c2c_1d_float32_c ( (ne10_fft_cpx_float32_t*) out_c, (ne10_fft_cpx_float32_t*) in_c, cfg_c, 0);
         }
         );
+#ifdef ENABLE_NE10_PLAIN_C_PLATFORM
+        time_neon = time_c;
+#else
         GET_TIME
         (
             time_neon,
@@ -216,6 +227,7 @@ void test_fft_c2c_1d_float32_performance()
                 ne10_fft_c2c_1d_float32_neon ( (ne10_fft_cpx_float32_t*) out_neon, (ne10_fft_cpx_float32_t*) in_neon, cfg_neon, 0);
         }
         );
+#endif
 
         time_speedup = (ne10_float32_t) time_c / time_neon;
         time_savings = ( ( (ne10_float32_t) (time_c - time_neon)) / time_c) * 100;
@@ -233,6 +245,9 @@ void test_fft_c2c_1d_float32_performance()
                 ne10_fft_c2c_1d_float32_c ( (ne10_fft_cpx_float32_t*) out_c, (ne10_fft_cpx_float32_t*) in_c, cfg_c, 1);
         }
         );
+#ifdef ENABLE_NE10_PLAIN_C_PLATFORM
+        time_neon = time_c;
+#else
         GET_TIME
         (
             time_neon,
@@ -241,6 +256,7 @@ void test_fft_c2c_1d_float32_performance()
                 ne10_fft_c2c_1d_float32_neon ( (ne10_fft_cpx_float32_t*) out_neon, (ne10_fft_cpx_float32_t*) in_neon, cfg_neon, 1);
         }
         );
+#endif
 
         time_speedup = (ne10_float32_t) time_c / time_neon;
         time_savings = ( ( (ne10_float32_t) (time_c - time_neon)) / time_c) * 100;
@@ -270,7 +286,7 @@ void test_fft_r2c_1d_float32_conformance()
         cfg = ne10_fft_alloc_r2c_float32 (fftSize);
         if (cfg == NULL)
         {
-            fprintf (stdout, "======ERROR, FFT alloc fails\n");
+            fprintf (stdout, "======ERROR, FFT alloc fails: %d\n", __LINE__);
             return;
         }
 
@@ -278,7 +294,11 @@ void test_fft_r2c_1d_float32_conformance()
         GUARD_ARRAY (out_neon, (fftSize / 2 + 1) * 2);
 
         ne10_fft_r2c_1d_float32_c ( (ne10_fft_cpx_float32_t*) out_c, in_c, cfg);
+#ifdef ENABLE_NE10_PLAIN_C_PLATFORM
+        ne10_fft_r2c_1d_float32 ( (ne10_fft_cpx_float32_t*) out_neon, in_neon, cfg);
+#else
         ne10_fft_r2c_1d_float32_neon ( (ne10_fft_cpx_float32_t*) out_neon, in_neon, cfg);
+#endif
 
         assert_true (CHECK_ARRAY_GUARD (out_c, (fftSize / 2 + 1) * 2));
         assert_true (CHECK_ARRAY_GUARD (out_neon, (fftSize / 2 + 1) * 2));
@@ -305,7 +325,11 @@ void test_fft_r2c_1d_float32_conformance()
         GUARD_ARRAY (out_neon, fftSize);
 
         ne10_fft_c2r_1d_float32_c (out_c, (ne10_fft_cpx_float32_t*) in_c, cfg);
+#ifdef ENABLE_NE10_PLAIN_C_PLATFORM
+        ne10_fft_c2r_1d_float32 (out_neon, (ne10_fft_cpx_float32_t*) in_neon, cfg);
+#else
         ne10_fft_c2r_1d_float32_neon (out_neon, (ne10_fft_cpx_float32_t*) in_neon, cfg);
+#endif
 
         assert_true (CHECK_ARRAY_GUARD (out_c, fftSize));
         assert_true (CHECK_ARRAY_GUARD (out_neon, fftSize));
@@ -339,7 +363,7 @@ void test_fft_r2c_1d_float32_performance()
         cfg = ne10_fft_alloc_r2c_float32 (fftSize);
         if (cfg == NULL)
         {
-            fprintf (stdout, "======ERROR, FFT alloc fails\n");
+            fprintf (stdout, "======ERROR, FFT alloc fails: %d\n", __LINE__);
             return;
         }
         test_loop = TEST_COUNT / fftSize;
@@ -352,6 +376,9 @@ void test_fft_r2c_1d_float32_performance()
                 ne10_fft_r2c_1d_float32_c ( (ne10_fft_cpx_float32_t*) out_c, in_c, cfg);
         }
         );
+#ifdef ENABLE_NE10_PLAIN_C_PLATFORM
+        time_neon = time_c;
+#else
         GET_TIME
         (
             time_neon,
@@ -360,6 +387,7 @@ void test_fft_r2c_1d_float32_performance()
                 ne10_fft_r2c_1d_float32_neon ( (ne10_fft_cpx_float32_t*) out_neon, in_neon, cfg);
         }
         );
+#endif
 
         time_speedup = (ne10_float32_t) time_c / time_neon;
         time_savings = ( ( (ne10_float32_t) (time_c - time_neon)) / time_c) * 100;
@@ -387,6 +415,9 @@ void test_fft_r2c_1d_float32_performance()
                 ne10_fft_c2r_1d_float32_c (out_c, (ne10_fft_cpx_float32_t*) in_c, cfg);
         }
         );
+#ifdef ENABLE_NE10_PLAIN_C_PLATFORM
+        time_neon = time_c;
+#else
         GET_TIME
         (
             time_neon,
@@ -395,6 +426,7 @@ void test_fft_r2c_1d_float32_performance()
                 ne10_fft_c2r_1d_float32_neon (out_neon, (ne10_fft_cpx_float32_t*) in_neon, cfg);
         }
         );
+#endif
 
         time_speedup = (ne10_float32_t) time_c / time_neon;
         time_savings = ( ( (ne10_float32_t) (time_c - time_neon)) / time_c) * 100;
@@ -491,15 +523,19 @@ ne10_int32_t test_c2c_alloc (ne10_int32_t fftSize)
     cfg_c = ne10_fft_alloc_c2c_float32_c (fftSize);
     if (cfg_c == NULL)
     {
-        fprintf (stdout, "======ERROR, FFT alloc fails\n");
+        fprintf (stdout, "======ERROR, FFT alloc fails: %d\n", __LINE__);
         return NE10_ERR;
     }
 
+#ifdef ENABLE_NE10_PLAIN_C_PLATFORM
+    cfg_neon = ne10_fft_alloc_c2c_float32 (fftSize);
+#else
     cfg_neon = ne10_fft_alloc_c2c_float32_neon (fftSize);
+#endif
     if (cfg_neon == NULL)
     {
         NE10_FREE (cfg_c);
-        fprintf (stdout, "======ERROR, FFT alloc fails\n");
+        fprintf (stdout, "======ERROR, FFT alloc fails: %d\n", __LINE__);
         return NE10_ERR;
     }
     return NE10_OK;

@@ -248,12 +248,21 @@ int boxfilter_conformance_test (ne10_size_t src_sz)
         printf ("test kernel size(%d x %d):",
                 kernels[i].x, kernels[i].y);
         //use ne10 neon version
+#ifdef ENABLE_NE10_PLAIN_C_PLATFORM
+        ne10_img_boxfilter_rgba8888 (src,
+                                          neon_dst,
+                                          src_sz,
+                                          stride,
+                                          stride,
+                                          kernels[i]);
+#else
         ne10_img_boxfilter_rgba8888_neon (src,
                                           neon_dst,
                                           src_sz,
                                           stride,
                                           stride,
                                           kernels[i]);
+#endif
         //use ne10 c version
         ne10_img_boxfilter_rgba8888_c (src,
                                        c_dst,
@@ -304,6 +313,9 @@ void boxfilter_performance_test (ne10_size_t img_size,
     }
     *c_ticks = ticks / run_loop;
 
+#ifdef ENABLE_NE10_PLAIN_C_PLATFORM
+    *neon_ticks = ticks / run_loop;
+#else
     /* boxfilter c version, run multiple times to get average time */
     for (i = 0; i < run_loop; i++)
     {
@@ -317,6 +329,7 @@ void boxfilter_performance_test (ne10_size_t img_size,
         ticks += ticks;
     }
     *neon_ticks = ticks / run_loop;
+#endif
 }
 
 void test_boxfilter_performance_case()

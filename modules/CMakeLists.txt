@@ -129,6 +129,7 @@ if(NE10_ENABLE_MATH)
       endforeach(intrinsic_file)
     endif()
 
+if(PLAIN_C_PLATFORM)
     set(NE10_MATH_NEON_SRCS
         ${PROJECT_SOURCE_DIR}/modules/math/NE10_abs.neon.s
         ${PROJECT_SOURCE_DIR}/modules/math/NE10_add.neon.s
@@ -147,6 +148,26 @@ if(NE10_ENABLE_MATH)
         ${PROJECT_SOURCE_DIR}/modules/math/NE10_transmat.neon.s
         ${PROJECT_SOURCE_DIR}/modules/math/NE10_identitymat.neon.s
     )
+else(PLAIN_C_PLATFORM)
+    set(NE10_MATH_NEON_SRCS
+        ${PROJECT_SOURCE_DIR}/modules/math/NE10_abs.c
+        ${PROJECT_SOURCE_DIR}/modules/math/NE10_add.c
+        ${PROJECT_SOURCE_DIR}/modules/math/NE10_div.c
+        ${PROJECT_SOURCE_DIR}/modules/math/NE10_len.c
+        ${PROJECT_SOURCE_DIR}/modules/math/NE10_mla.c
+        ${PROJECT_SOURCE_DIR}/modules/math/NE10_mul.c
+        ${PROJECT_SOURCE_DIR}/modules/math/NE10_normalize.c
+        ${PROJECT_SOURCE_DIR}/modules/math/NE10_sub.c
+        ${PROJECT_SOURCE_DIR}/modules/math/NE10_dot.c
+        ${PROJECT_SOURCE_DIR}/modules/math/NE10_cross.c
+        ${PROJECT_SOURCE_DIR}/modules/math/NE10_mulmat.c
+        ${PROJECT_SOURCE_DIR}/modules/math/NE10_mulcmatvec.c
+        ${PROJECT_SOURCE_DIR}/modules/math/NE10_detmat.c
+        ${PROJECT_SOURCE_DIR}/modules/math/NE10_invmat.c
+        ${PROJECT_SOURCE_DIR}/modules/math/NE10_transmat.c
+        ${PROJECT_SOURCE_DIR}/modules/math/NE10_identitymat.c
+    )
+endif(PLAIN_C_PLATFORM)
 if(IOS_PLATFORM)
     convert_gas(NE10_MATH_NEON_SRCS NE10_MATH_IOS_NEON_SRCS)
     #message(STATUS "convert_gas:${NE10_MATH_IOS_NEON_SRCS}")
@@ -221,16 +242,21 @@ if(NE10_ENABLE_DSP)
             ${PROJECT_SOURCE_DIR}/modules/dsp/NE10_fft_int16.neon.c
         )
     else()
-        add_definitions(-DNE10_UNROLL_LEVEL=1)
-        set(NE10_DSP_INTRINSIC_SRCS
-            ${NE10_DSP_INTRINSIC_SRCS}
-            ${PROJECT_SOURCE_DIR}/modules/dsp/NE10_fft_float32.neonintrinsic.c
-            ${PROJECT_SOURCE_DIR}/modules/dsp/NE10_fft_int32.neonintrinsic.c
-            ${PROJECT_SOURCE_DIR}/modules/dsp/NE10_fft_int16.neonintrinsic.c
-            ${PROJECT_SOURCE_DIR}/modules/dsp/NE10_rfft_float32.neonintrinsic.c
-            )
+        if(PLAIN_C_PLATFORM)
+        else(PLAIN_C_PLATFORM)
+            add_definitions(-DNE10_UNROLL_LEVEL=1)
+            set(NE10_DSP_INTRINSIC_SRCS
+                ${NE10_DSP_INTRINSIC_SRCS}
+                ${PROJECT_SOURCE_DIR}/modules/dsp/NE10_fft_float32.neonintrinsic.c
+                ${PROJECT_SOURCE_DIR}/modules/dsp/NE10_fft_int32.neonintrinsic.c
+                ${PROJECT_SOURCE_DIR}/modules/dsp/NE10_fft_int16.neonintrinsic.c
+                ${PROJECT_SOURCE_DIR}/modules/dsp/NE10_rfft_float32.neonintrinsic.c
+                )
+        endif(PLAIN_C_PLATFORM)
     endif()
 
+if(PLAIN_C_PLATFORM)
+else(PLAIN_C_PLATFORM)
     # Add dsp intrinsic NEON files.
     set(NE10_DSP_INTRINSIC_SRCS
         ${NE10_DSP_INTRINSIC_SRCS}
@@ -243,6 +269,7 @@ if(NE10_ENABLE_DSP)
             set_source_files_properties(${intrinsic_file} PROPERTIES COMPILE_FLAGS "-mfpu=neon" )
         endforeach(intrinsic_file)
     endif()
+endif(PLAIN_C_PLATFORM)
 
 if(IOS_PLATFORM)
     set_file_to_c(NE10_DSP_NEON_SRCS)
@@ -281,11 +308,13 @@ if(NE10_ENABLE_IMGPROC)
             ${PROJECT_SOURCE_DIR}/modules/imgproc/NE10_rotate.neon.s
             )
     endif()
+if(ENABLE_NE10_PLAIN_C_PLATFORM)
         # Add image intrinsic NEON files.
     set(NE10_IMGPROC_INTRINSIC_SRCS
         ${PROJECT_SOURCE_DIR}/modules/imgproc/NE10_resize.neon.c
         ${PROJECT_SOURCE_DIR}/modules/imgproc/NE10_boxfilter.neon.c
     )
+endif(ENABLE_NE10_PLAIN_C_PLATFORM)
     # Tell CMake these files need to be compiled with "-mfpu=neon"
     if("${NE10_TARGET_ARCH}" STREQUAL "armv7")
       foreach(intrinsic_file ${NE10_IMGPROC_INTRINSIC_SRCS})

@@ -44,6 +44,9 @@ ne10_result_t ne10_HasNEON()
 ne10_result_t ne10_init()
 {
     ne10_result_t status = NE10_ERR;
+#ifdef ENABLE_NE10_PLAIN_C_PLATFORM
+    is_NEON_available = NE10_ERR;
+#else
 #ifndef __MACH__
     FILE*   infofile = NULL;               // To open the file /proc/cpuinfo
     ne10_int8_t    cpuinfo[CPUINFO_BUFFER_SIZE];  // The buffer to read in the string
@@ -82,6 +85,8 @@ ne10_result_t ne10_init()
 #else  //__MACH__
     is_NEON_available = NE10_OK;
 #endif //__MACH__
+#endif
+
 
 #if defined (NE10_ENABLE_MATH)
     status = ne10_init_math (is_NEON_available);

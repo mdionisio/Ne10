@@ -346,6 +346,7 @@ ne10_fft_cpx_float32_t* ne10_fft_generate_twiddles_transposed_float32 (
  * @{
  */
 
+#ifndef ENABLE_NE10_PLAIN_C_PLATFORM
 /** Specific implementation of @ref ne10_fft_alloc_c2c_float32 for @ref ne10_fft_c2c_1d_float32_neon. */
 ne10_fft_cfg_float32_t ne10_fft_alloc_c2c_float32_neon (ne10_int32_t nfft)
 {
@@ -448,7 +449,9 @@ ne10_fft_cfg_float32_t ne10_fft_alloc_c2c_float32_neon (ne10_int32_t nfft)
 
     return st;
 }
+#endif
 
+#ifndef ENABLE_NE10_PLAIN_C_PLATFORM
 /** Specific implementation of @ref ne10_fft_alloc_c2c_int32 for @ref ne10_fft_c2c_1d_int32_neon. */
 ne10_fft_cfg_int32_t ne10_fft_alloc_c2c_int32_neon (ne10_int32_t nfft)
 {
@@ -549,6 +552,7 @@ ne10_fft_cfg_int32_t ne10_fft_alloc_c2c_int32_neon (ne10_int32_t nfft)
 
     return st;
 }
+#endif
 
 /**
  * @brief Destroys the configuration structure allocated by variants of @ref ne10_fft_alloc_c2c_float32 (frees memory, etc.)

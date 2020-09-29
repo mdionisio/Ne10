@@ -427,14 +427,20 @@ static void ne10_img_resize_generic_linear_neon (ne10_uint8_t* src,
 
         if (k0 < ksize)
         {
+#ifndef ENABLE_NE10_PLAIN_C_PLATFORM
             if (cn == 4)
                 ne10_img_hresize_4channels_linear_neon (srows + k0, rows + k0, ksize - k0, xofs, alpha,
                                                         srcw, dstw, cn, xmin, xmax);
             else
+#endif
                 ne10_img_hresize_linear_c (srows + k0, rows + k0, ksize - k0, xofs, alpha,
                                            srcw, dstw, cn, xmin, xmax);
         }
+#ifndef ENABLE_NE10_PLAIN_C_PLATFORM
         ne10_img_vresize_linear_neon ( (const ne10_int32_t**) rows, (ne10_uint8_t*) (dst + dststep * dy), beta, dstw);
+#else
+        ne10_img_vresize_linear_c ( (const ne10_int32_t**) rows, (ne10_uint8_t*) (dst + dststep * dy), beta, dstw);
+#endif
     }
 
     NE10_FREE (buffer_);

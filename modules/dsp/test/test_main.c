@@ -30,6 +30,7 @@
  */
 
 #include "seatest.h"
+#include "NE10.h"
 #include <stdio.h>
 
 void test_fixture_fft_c2c_1d_float32 (void);
@@ -74,6 +75,7 @@ void my_suite_teardown (void)
 
 int main (ne10_int32_t argc, char** argv)
 {
+    ne10_init();
     suite_setup (my_suite_setup);
     suite_teardown (my_suite_teardown);
     return !run_tests (all_tests);

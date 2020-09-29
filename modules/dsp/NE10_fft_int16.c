@@ -1079,7 +1079,6 @@ ne10_fft_cfg_int16_t ne10_fft_alloc_c2c_int16 (ne10_int32_t nfft)
                               + NE10_FFT_BYTE_ALIGNMENT;             /* 64-bit alignment */
 
     st = (ne10_fft_cfg_int16_t) NE10_MALLOC (memneeded);
-
     if (st)
     {
         uintptr_t address = (uintptr_t) st + sizeof (ne10_fft_state_int16_t);
