@@ -139,6 +139,7 @@ if(ANDROID_PLATFORM)
     message("-- CMAKE_C_FLAGS:
     ${CMAKE_C_FLAGS}")
 elseif(GNULINUX_PLATFORM)
+    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
     if("${NE10_TARGET_ARCH}" STREQUAL "armv7")
       set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mthumb -march=armv7-a -mfpu=vfp3 -funsafe-math-optimizations")
       set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS} -mthumb -march=armv7-a -mfpu=neon")
