@@ -121,10 +121,10 @@ static void ne10_img_hresize_linear_c (const ne10_uint8_t** src,
                                        ne10_int32_t count,
                                        const ne10_int32_t* xofs,
                                        const ne10_int16_t* alpha,
-                                       ne10_int32_t swidth,
+                                       __attribute__((unused)) ne10_int32_t swidth,
                                        ne10_int32_t dwidth,
                                        ne10_int32_t cn,
-                                       ne10_int32_t xmin,
+                                       __attribute__((unused)) ne10_int32_t xmin,
                                        ne10_int32_t xmax)
 {
     ne10_int32_t dx, k;

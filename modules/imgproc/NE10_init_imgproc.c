@@ -29,7 +29,7 @@
 
 #include "NE10_imgproc.h"
 
-ne10_result_t ne10_init_imgproc (ne10_int32_t is_NEON_available)
+ne10_result_t ne10_init_imgproc (__attribute__((unused)) ne10_int32_t is_NEON_available)
 {
 #ifndef ENABLE_NE10_PLAIN_C_PLATFORM
     if (NE10_OK == is_NEON_available)

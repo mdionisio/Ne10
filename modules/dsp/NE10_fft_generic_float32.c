@@ -242,11 +242,11 @@ static inline void ne10_radix_4_butterfly_float32_c (ne10_fft_cpx_float32_t *Fou
 
 static inline void ne10_radix_8_butterfly_float32_c (ne10_fft_cpx_float32_t *Fout,
         const ne10_fft_cpx_float32_t *Fin,
-        const ne10_fft_cpx_float32_t *twiddles,
+        __attribute__((unused)) const ne10_fft_cpx_float32_t *twiddles,
         const ne10_int32_t fstride,
         const ne10_int32_t out_step,
         const ne10_int32_t nfft,
-        const ne10_int32_t is_first_stage,
+        __attribute__((unused)) const ne10_int32_t is_first_stage,
         const ne10_int32_t is_inverse,
         const ne10_int32_t is_scaled)
 {
