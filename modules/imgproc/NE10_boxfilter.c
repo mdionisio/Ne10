@@ -289,7 +289,7 @@ void ne10_img_boxfilter_col_c (const ne10_uint8_t *src,
     assert ( (kernel.y > 0) && (kernel.y < (1 << 16)));
     assert (kernel.y <= src_sz.y);
 
-    ne10_int32_t x, y, k;
+    ne10_uint32_t x, y, k;
 
     for (x = 0; x < src_sz.x; x++)
     {
